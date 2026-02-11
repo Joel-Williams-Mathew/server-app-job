@@ -7,17 +7,34 @@ function Login() {
   const navigate = useNavigate()
 
   const handleGoogleLogin = async () => {
-    try {
-      const provider = new GoogleAuthProvider()
-      await signInWithPopup(auth, provider)
+  try {
+    const provider = new GoogleAuthProvider()
+    const result = await signInWithPopup(auth, provider)
 
-      alert("Login Successful 🎉")
-      navigate("/dashboard")
-    } catch (error) {
-      console.error("Login Error:", error)
-      alert("Login Failed ❌")
-    }
+    const user = result.user
+
+    // Send user data to backend
+    await fetch("http://localhost:5000/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firebase_uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+      }),
+    })
+
+    alert("Login Successful 🎉")
+    navigate("/dashboard")
+
+  } catch (error) {
+    console.error("Login Error:", error)
+    alert("Login Failed ❌")
   }
+}
+
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-900">
