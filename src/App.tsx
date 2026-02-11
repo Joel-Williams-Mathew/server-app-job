@@ -7,10 +7,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Default route → Login */}
         <Route path="/" element={<Login />} />
 
-        {/* Protected Dashboard */}
         <Route
           path="/dashboard"
           element={
